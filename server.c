@@ -25,12 +25,12 @@ void calculateTotalGrade(int sockfd) {
 
     // Exit the loop if the client wants to quit
     if (strncmp("exit", buffer, 4) == 0) {
-      printf("Server Exit...\n");
+      printf("Exiting server\n");
       return;
       }
 
     grade = atof(buffer);
-
+    
     // processing the grade
     if (grade < 40) {
       strcpy(buffer, "F");

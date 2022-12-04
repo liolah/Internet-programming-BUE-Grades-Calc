@@ -13,6 +13,7 @@
 
 void calculateTotalGrade(int sockfd) {
   float avg, sum;
+  char rerun;
   char buffer[MAX];
 
   while (1) {
@@ -20,11 +21,11 @@ void calculateTotalGrade(int sockfd) {
 
     printf("Welcome to the BUE grades calculator.\nTo calculate the average grade enter the numerical grades of five subjects. To exit at anytime type \"exit\".\n");
     for (int i = 0;i < 5;i++) {
-      printf("Enter the student grade in module %d:\n", i + 1);
+      printf("Enter the student's grade in module %d:\n", i + 1);
       fgets(buffer, MAX, stdin);
       if ((strncmp(buffer, "exit", 4)) == 0) { // checks if the input is "exit" to close the client
         write(sockfd, buffer, MAX);
-        printf("Client Exit...\n");
+        printf("Exiting client...\n");
         return;
         }
       sum += atof(buffer); // if the input is not "exit" converts it from string to float to calculate average
@@ -43,7 +44,18 @@ void calculateTotalGrade(int sockfd) {
     // Get the grade from the server
     read(sockfd, buffer, MAX);
 
-    printf("\nThe student is total grade: %s\n\n", buffer);
+    printf("\nThe student's average grade: %s\n\n", buffer);
+
+    // Ask the user if he wants to continue 
+    printf("Do you want to calculate another grade? (y/n)\n");
+    scanf(" %c", &rerun);
+    if (rerun == 'y') continue;
+    else {
+      strcpy(buffer, "exit");
+      write(sockfd, buffer, MAX);
+      printf("Exiting client...\n");
+      return;
+      }
     }
   }
 
