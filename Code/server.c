@@ -1,3 +1,9 @@
+/* ----------------------------------------------------------------------------------------------------------------
+*   Code written by:
+*                   Hesham Hany Ahmed Fouad      206645
+*                   Abdelrahman Mostafa          206395
+*                   Mahmoud Ashraf               204858
+*-----------------------------------------------------------------------------------------------------------------*/
 #include <string.h>
 #include <unistd.h>
 #include <stdio.h> 
@@ -30,7 +36,7 @@ void calculateTotalGrade(int sockfd) {
       }
 
     grade = atof(buffer);
-    
+
     // processing the grade
     if (grade < 40) {
       strcpy(buffer, "F");
@@ -114,24 +120,22 @@ int main() {
   else
     printf("Server listening..\n");
 
-  // accept the data packet from client and verification 
-  connfd = accept(sockfd, (SA*)&servaddr, (socklen_t*)&servaddr_len);
-  if (connfd < 0) {
-    printf("server accept failed...\n");
-    exit(0);
+  while (1) {
+    // accept the data packet from client and verification 
+    connfd = accept(sockfd, (SA*)&servaddr, (socklen_t*)&servaddr_len);
+    if (connfd < 0) {
+      printf("server accept failed...\n");
+      exit(0);
+      }
+    else
+      printf("server accept the client...\n");
+
+    // calling the function for chatting between client and server 
+    calculateTotalGrade(connfd);
+
+    // After chatting close the socket 
+    close(connfd);
     }
-  else
-    printf("server accept the client...\n");
-
-  // calling the function for chatting between client and server 
-  calculateTotalGrade(connfd);
-
-  // After chatting close the socket 
-  close(connfd);
-
-  // closing the listening socket
-  // Server doesn't shutdown in order to keep serving clients, server closes if there are no clients
-  // shutdown(sockfd, SHUT_RDWR);
 
   return 0;
   }
